@@ -1,8 +1,35 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useSpotsStore } from '../stores/spotsStore';
+
+const store = useSpotsStore();
 
 const video = ref(null);
 const image = ref(null);
+
+//addspots refs
+const fotoref = ref('');
+const titelref = ref('');
+const beschreibungref = ref('');
+const ratingref = ref('');
+const likesref = ref('');
+const addedbyref = ref('');
+const latituderef = ref('');
+const longituderef = ref('');
+
+const addspot = () => {
+  const newspot = {
+    foto: fotoref.value,
+    titel: titelref.value,
+    beschreibung: beschreibungref.value,
+    rating: ratingref.value,
+    likes: likesref.value,
+    added_by: addedbyref.value,
+    latitude: latituderef.value,
+    longitude: longituderef.value,
+  };
+  store.makeSpots(newspot);
+};
 
 const constraints = ref({
   audio: false,
@@ -34,6 +61,7 @@ function takeimage() {
       reader.readAsDataURL(blob);
       reader.onloadend = function () {
         const base64img = reader.result;
+        fotoref.value = base64img;
         console.log(base64img);
       };
     })
@@ -49,4 +77,65 @@ function takeimage() {
       <q-btn color="white" @click="takeimage()" text-color="black">Take picture</q-btn>
     </div>
   </div>
+
+  <!-- Inputs -->
+  <q-card>
+    <q-form @submit="addspot()" @reset="onReset" class="q-gutter-md">
+      <!-- Inputs -->
+      <q-input
+        filled
+        v-model="titelref"
+        label="Name of the Spot"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+      />
+      <q-input
+        filled
+        v-model="beschreibungref"
+        label="Description"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+      />
+      <q-input
+        filled
+        v-model="ratingref"
+        label="Rating"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+      />
+      <q-input
+        filled
+        v-model="likesref"
+        label="Likes"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+      />
+      <q-input
+        filled
+        v-model="addedbyref"
+        label="Added_By:"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+      />
+      <q-input
+        filled
+        v-model="latituderef"
+        label="latitude"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+      />
+      <q-input
+        filled
+        v-model="longituderef"
+        label="longitude"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+      />
+
+      <div>
+        <q-btn label="Add Spot" type="submit" color="primary" />
+        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+      </div>
+    </q-form>
+  </q-card>
 </template>

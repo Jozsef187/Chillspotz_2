@@ -18,14 +18,9 @@ const router = createRouter({
       component: AboutView,
     },
     {
-      path: '/camera',
-      name: 'camera',
-      component: Cameraview,
-    },
-    {
       path: '/add',
-      name: 'AddSpot',
-      component: AddView,
+      name: 'add',
+      component: Cameraview,
     },
   ],
 });

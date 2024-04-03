@@ -17,9 +17,14 @@ export const useSpotsStore = defineStore('spotsStore', () => {
     detail.value = message.data;
   };
 
+  const makeSpots = async (newspot) => {
+    await axios.post(`http://localhost:3000/spots`, newspot);
+    getSpots();
+  };
+
   const delSpot = async (pid) => {
     await axios.delete(`http://localhost:3000/spots/${pid}`);
     getSpots();
   };
-  return { data, detail, getSpots, getSpotsDetail, delSpot };
+  return { data, detail, getSpots, getSpotsDetail, makeSpots, delSpot };
 });

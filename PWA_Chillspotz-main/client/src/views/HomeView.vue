@@ -13,7 +13,13 @@ const editItem = (item) => {
 };
 
 const cols = [
-  { name: 'Foto', field: 'foto', label: 'Image:', align: 'center' },
+  {
+    name: 'foto',
+    field: 'foto',
+    label: 'Image:',
+    align: 'center',
+    format: (val) => `http://localhost:3000/pictures/${val}`,
+  },
   { name: 'name', field: 'titel', label: 'Name', align: 'left' },
   { name: 'Beschreibung', field: 'Beschreibung', label: '', align: 'left' },
   { name: 'rating', field: 'rating', label: 'Rating', align: 'right' },
@@ -36,11 +42,13 @@ const cols = [
         class="lt-md"
       >
         <template v-slot:top-right>
-          <q-btn @click="" icon="add" color="purple"></q-btn>
+          <q-btn :to="'./Add'" icon="add" color="purple"></q-btn>
         </template>
         <template v-slot:item="props">
-          <q-card class="col-12 text-left">
-            <q-card-section> <img :src="'../../public/${props.row.foto}'" /> </q-card-section>
+          <q-card class="col-12 text-center">
+            <q-card-section>
+              <img height="200" :src="`http://localhost:3000/pictures/${props.row.foto}`" />
+            </q-card-section>
             <q-card-section>{{ props.row.pid + ') ' + props.row.titel }} </q-card-section>
 
             <!-- <q-card-section>{{ 'Beschreibung: ' + props.row.beschreibung }} </q-card-section -->
@@ -49,10 +57,10 @@ const cols = [
               {{ 'Likes:' + props.row.likes }}
             </q-card-section>
             <q-card-section
-              >{{ 'GPS: ' + props.row.latitude + ';  ' + props.row.longitude }}
+              >{{ 'GPS: ' + props.row.latitude + '; ' + props.row.longitude }}
               <!-- button -->
               <br />
-              <q-btn text-color="black" @click="editItem(props.row)" icon="edit" color="white"
+              <q-btn text-color="black" @click="editItem(props.row)" icon="edit" color="yellow"
                 >Edit</q-btn
               >
             </q-card-section>
@@ -72,11 +80,18 @@ const cols = [
         class="gt-sm"
       >
         <template v-slot:top-right>
-          <q-btn @click="" icon="add" color="purple">Add Spot</q-btn>
+          <q-btn :to="'./Add'" icon="add" color="purple">Add Spot</q-btn>
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn align="right" @click="editItem(props.row)" icon="edit ">Edit</q-btn>
+            <q-btn
+              align="right"
+              @click="editItem(props.row)"
+              color="yellow"
+              text-color="black"
+              icon="edit "
+              >Edit</q-btn
+            >
           </q-td>
         </template>
 
@@ -85,13 +100,19 @@ const cols = [
             {{ 'lat: ' + props.row.latitude + ';   long:' + props.row.longitude }}
           </q-td>
         </template>
+
+        <template v-slot:body-cell-foto="props">
+          <q-td :props="props">
+            <q-img :src="`http://localhost:3000/pictures/${props.row.foto}`" />
+          </q-td>
+        </template>
       </q-table>
     </q-card>
 
     <!-- dialog -->
     <q-dialog v-model="showdetailpage">
       <q-card class="my-card">
-        <img :src="'../../public/${currentSpot.foto}'" />
+        <img height="200" :src="`http://localhost:3000/pictures/${currentSpot.foto}`" />
 
         <q-card-section>
           <div class="text-h6">{{ currentSpot.pid + ')' + currentSpot.titel }}</div>
